@@ -12,6 +12,10 @@ a try if you have the need.
 
 Dependencies
 ------------
+Packages:
+* redis-server (http://code.google.com/p/redis)
+
+Gems:
 * redis
 * resque
 * sinatra
@@ -31,8 +35,10 @@ you are using Redis 1.x, you may want to swap it out.
     $ gem list | grep redis
     redis (1.0.7)
 
+
 Getting Started
 ---------------
+
 1. Install the gem
         sudo gem install flamingo
 

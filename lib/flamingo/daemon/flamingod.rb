@@ -1,5 +1,4 @@
 module Flamingo
-  FLAMINGO_SLEEP_DELAY = ENV['FLAMINGO_SLEEP_DELAY'].to_i || 0
   module Daemon
     #
     # Flamingod is the main overseer of the Flamingo flock.
@@ -88,21 +87,17 @@ module Flamingo
 
       #
       # Unless signaled externally, waits in an endless loop. If any child
-      # process terminates, it attends an optional delay (set by
-      # Flamingo::FLAMINGO_SLEEP_DELAY) and then restarts that process.
-      #
+      # process terminates, it restarts that process.
+      # TODO Needs intelligent behavior so we don't get endless loops
       def wait_on_children()
         until exit_signaled?
           child_pid = Process.wait(-1)
           unless exit_signaled?
             if @wader.pid == child_pid
-              print "Wader died" ; sleep Flamingo::FLAMINGO_SLEEP_DELAY ; puts " ...restarting wader"
               @wader = start_new_wader
             elsif @web_server.pid == child_pid
-              print "Webserver died" ; sleep Flamingo::FLAMINGO_SLEEP_DELAY ; puts " ...restarting web server"
               @web_server = start_new_web_server
             elsif (to_delete = @dispatchers.find{|d| d.pid == child_pid})
-              print "Dispatcher #{child_pid} died" ; sleep Flamingo::FLAMINGO_SLEEP_DELAY ; puts " ...restarting dispatcher"
               @dispatchers.delete(to_delete)
               @dispatchers << start_new_dispatcher
             else

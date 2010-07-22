@@ -4,7 +4,7 @@ Flamingo is a resque-based system for handling the Twitter Streaming API.
 
 This is *early alpha* code. Parts of it are graceful, like the curve of a
 flamingo's neck: it capably processes the multiple high-volume sample and filter
-streams that power cheaptweet.com. Many parts of it are ungainly, like a
+streams that power tweetreach.com. Many parts of it are ungainly, like a
 flamingo's knees: this is early code, and it will change rapidly. And parts of
 it are mired in muck, like a flamingo's feet: it has too few tests, and surely
 some configuration we forgot to tell you about. That said, it does work: give it
@@ -134,16 +134,16 @@ Flamingo uses EventMachine, sinatra and the twitter-stream API library to
 efficiently route and process stream and dispatch events. Here are the
 components of the flamingo flock:
 
-*flamingo daemon*
+*flamingo daemon (flamingod)*
 
 Coordinates the wader process (initiates stream request, pushes each response
-into the queue), the Sinatra webserver (handles subscriptions), and a set of
-dispatchers (routes responses).
+into the queue), the Sinatra webserver (handles subscriptions and changing 
+stream parameters), and a set of dispatchers (routes responses).
 
 You can control flamingod with the following signals:
 
 * TERM and INT will kill the flamingod parent process, and signal each child with TERM
-* USR1 will restart the wader gracefully.
+* USR1 will restart the wader gracefully. This is used to change stream parameters
 
 *wader*
 
@@ -163,10 +163,7 @@ code.
 
 TODO
 -----
-
 * OAuth instructions
-* `kill -USR1 xxxx` acts funny -- things restart but not as we'd like
-
     
 
 Flamingo

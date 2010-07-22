@@ -49,11 +49,11 @@ rescue => e
   exit(-1)
 end
 
-flamingod = Flamingo::Daemon::Flamingod.new
+flamingod = Flamingo::Daemon::Flamingod.new 
 if options[:daemonize]
   begin
     pid = flamingod.run_as_daemon()
-    puts "flamingod process #{pid} started"
+    puts "flamingod process #{pid} started" 
   rescue => e
     $stderr.puts "Could not start: #{e.message}"
     exit(-2)

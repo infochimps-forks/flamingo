@@ -2,7 +2,7 @@
 # Simple example: reads from a subscription queue, writes the events to STDOUT
 #
 # Usage (from this directory):
-#   $ QUEUE=EXAMPLES rake -f examples/Rakefile resque:work
+#   $ QUEUE=EXAMPLES rake resque:work
 
 require 'rubygems'
 require 'resque/tasks'

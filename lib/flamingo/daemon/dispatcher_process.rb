@@ -10,6 +10,6 @@ module Flamingo
         Flamingo.logger.info "Starting dispatcher on pid=#{Process.pid} under pid=#{Process.ppid}"
         worker.work(1) # Wait 1s between jobs
       end
-    end
+    end    
   end
 end

@@ -1,3 +1,5 @@
+require 'wukong'
+
 module Flamingo
   class Wader
     attr_accessor :screen_name, :password, :stream, :connection
@@ -20,7 +22,13 @@ module Flamingo
         self.connection = stream.connect(:auth=>"#{screen_name}:#{password}")
         Flamingo.logger.info("Listening on stream: #{stream.path}")
 
+        chunk_file = Wukong::Store::ChhChunkedFlatFileStore.new( { :rootdir => '/home/chris/infochimps', :chunktime => 10 , :filemode => 'w'} )
+  
+        EventMachine.add_periodic_timer(4*60) { chunk_file.new_chunk }
+
         connection.each_item do |event_json|
+          chunk_file << event_json
+          chunk_file.flush
           dispatch_event(event_json)
         end
 
@@ -49,16 +57,16 @@ module Flamingo
       EM.stop
     end
 
-    private
+    protected
       def dispatch_event(event_json)
         Flamingo.logger.debug "Wader dispatched event"
-        Resque.enqueue(Flamingo::DispatchEvent, event_json)
+        ##CHH Disabled ##  Resque.enqueue(Flamingo::DispatchEvent, event_json)
         # Resque.enqueue(Flamingo::DispatchEvent, {:src => "flamingo:#{stream.name}"}, event_json)
       end
 
       def dispatch_error(type,message,data={})
         Flamingo.logger.error "Received error: #{message}"
-        Resque.enqueue(Flamingo::DispatchError, type, message, data)
+        ##CHH Disabled ## Resque.enqueue(Flamingo::DispatchError, type, message, data)
       end
   end
 end

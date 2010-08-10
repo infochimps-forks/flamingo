@@ -10,11 +10,22 @@ module Flamingo
         $0 = 'flamingod-wader'
         config = Flamingo.config
         
-        screen_name = config.username
-        password    = config.password
+        if config.oauth == "true" 
+           oauth = {}
+           oauth[:consumer_key]    =
+           oauth[:consumer_secret] =
+           oauth[:access_key]      =
+           oauth[:access_secret]   =
+           authenticator = { :oauth => oauth }
+        else
+           screen_name = config.username
+           password    = config.password
+           authenticator = { :auth => "#{screen_name}:#{password}" }
+        end
+
         stream      = Stream.get(config.stream)
 
-        @wader = Flamingo::Wader.new(screen_name,password,stream)
+        @wader = Flamingo::Wader.new(authenticator,stream)
         Flamingo.logger.info "Starting wader on pid=#{Process.pid} under pid=#{Process.ppid}"
         @wader.run
         Flamingo.logger.info "Wader pid=#{Process.pid} stopped"

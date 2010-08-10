@@ -2,12 +2,21 @@ require 'wukong'
 
 module Flamingo
   class Wader
-    attr_accessor :screen_name, :password, :stream, :connection
+    attr_accessor :stream, :connection, :stream_options
 
-    def initialize(screen_name,password,stream)
-      self.screen_name = screen_name
-      self.password = password
+    #
+    # For authentication, stream_options should contain one of the following:
+    #     { :auth => "screenname:password" }
+    # or
+    #     { :oauth => {
+    #         :consumer_key    => [consumer key],
+    #         :consumer_secret => [consumer secret],
+    #         :access_key      => [access key],
+    #         :access_secret   => [access secret]
+    #     }
+    def initialize(stream_options,stream)
       self.stream = stream
+      self.stream_options = authenticator
     end
 
     #
@@ -19,12 +28,12 @@ module Flamingo
     #
     def run
       EventMachine::run do
-        self.connection = stream.connect(:auth=>"#{screen_name}:#{password}")
+         self.connection(stream_options)
         Flamingo.logger.info("Listening on stream: #{stream.path}")
 
         chunk_file = Wukong::Store::ChhChunkedFlatFileStore.new( { :rootdir => '/home/chris/infochimps', :chunktime => 10 , :filemode => 'w'} )
   
-        EventMachine.add_periodic_timer(4*60) { chunk_file.new_chunk }
+        EventMachine.add_periodic_timer(4*60*60) { chunk_file.new_chunk }
 
         connection.each_item do |event_json|
           chunk_file << event_json

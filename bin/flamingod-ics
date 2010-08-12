@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+require 'flamingo'
+require 'optparse'
+
+require 'wukong'
+module Flamingo
+  class Wader
+    private
+    def dispatch_event event_json
+      Flamingo.logger.debug "Wader dispatched event -- monkeypatched"
+      commitlog << event_json
+      Resque.enqueue(Flamingo::DispatchEvent, event_json)
+    end
+
+    def commitlog
+      return @commitlog if @commitlog
+      @commitlog = Wukong::Store::ChhChunkedFlatFileStore.new( { :rootdir => File.expand_path(Flamingo.config.commitlog_path), :chunktime => Flamingo.config.commitlog_chunk_time , :filemode => 'a+'} )
+      EventMachine.add_periodic_timer(Flamingo.config.commitlog_chunk_time){ @commitlog.new_chunk }
+      @commitlog
+    end
+  end
+end
+
+load File.dirname(__FILE__) + '/flamingod'

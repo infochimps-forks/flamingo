@@ -1,2 +1,4 @@
 .loadpath
 .project
+dump.rdb
+log/*.log

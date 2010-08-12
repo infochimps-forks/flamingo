@@ -1,6 +1,15 @@
 username:       SCREEN_NAME
 password:       PASSWORD
 
+# # To use OAuth, follow the instructions in the README, and uncomment below
+# # (comment out the username and password too of course)
+# #
+# oauth:
+#   :consumer_key:        afgRzQkL12pb343asdMp9
+#   :consumer_secret:     aasdfghkkladsfjhasdlkgjahsdflkjasdhfalsdV0
+#   :access_token:        12345689-AASasdfwqterwrJ4567HAasdflksdfsuad1309I
+#   :access_secret:       sadflkjhARTOUWRVzcvkjasldruasdkjxcbkjasdhfrkdhvl
+
 # either "filter" or "sample"
 # For filter, set the terms to track in the flamingo console (see README.md)
 stream:         filter

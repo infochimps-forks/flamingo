@@ -44,7 +44,7 @@ Getting Started
 
 2. Create a config file (see `examples/flamingo.yml`) with at least a username
 and password. You can store this in ~/flamingo.yml or specify it on the
-commandline (see below)
+commandline (see below). Also see below for OAuth instructions.
 
         username: SCREEN_NAME
         password: PASSWORD
@@ -161,9 +161,31 @@ many machines, doing anything that your heart can imagine and your fingers can
 code.
 
 
-TODO
+OAuth
 -----
-* OAuth instructions
+
+1. Visit dev.twitter.com and click 'Your Apps', then 'Register a New App'.
+
+2. Register your app under the account you'll want to use. Use a name like
+'Flamingo-@yourname' (you can't re-use a name). Choose 'Desktop Client' and
+'Read-only'.
+
+3. Once you hit submit, you'll be taken to the page for your new app. Paste the
+Consumer key and Consumer secret into the config file (see step 5)
+
+4. Click 'My Access Token', and paste the Access Token and Access Token Secret
+into the config file.
+
+5. Open up your flamingo config file (~/.flamingo.yml, probably), and add your keys:
+
+    oauth:
+      :consumer_key:        afgRzQkL12pb343asdMp9
+      :consumer_secret:     aasdfghkkladsfjhasdlkgjahsdflkjasdhfalsdV0
+      :access_token:        12345689-AASasdfwqterwrJ4567HAasdflksdfsuad1309I
+      :access_secret:       sadflkjhARTOUWRVzcvkjasldruasdkjxcbkjasdhfrkdhvl
+
+   (indentation matters: the ':oauth:' part must be flush left, the rest indented two spaces)
+
     
 
 Flamingo

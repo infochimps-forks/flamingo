@@ -1,19 +1,19 @@
 module Flamingo
-  class Config
+  class Config < Hash
 
     def self.load(file)
       new(YAML.load(IO.read(file)))
     end
-  
+
     def initialize(hash={})
-      @data = hash
+      replace hash
     end
-    
+
     def method_missing(name,*args,&block)
       if name.to_s =~ /(.+)=$/
-        @data[$1] = *args
+        self[$1] = *args
       else
-        value = @data[name.to_s]
+        value = self[name.to_s]
         if value.is_a?(Hash)
           self.class.new(value)
         elsif value.nil? || empty_config?(value)
@@ -26,7 +26,7 @@ module Flamingo
           else
             # Return back a config object
             value = self.class.new
-            @data[name.to_s] = value
+            self[name.to_s] = value
             value
           end
         else
@@ -34,19 +34,19 @@ module Flamingo
         end
       end
     end
-    
+
     def respond_to?(name)
       true
     end
-    
-    def empty?
-      @data.empty?
+
+    def present?
+      not blank?
     end
-    
+
     private
       def empty_config?(value)
         value.is_a?(self.class) && value.empty?
       end
 
-  end 
+  end
 end

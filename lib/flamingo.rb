@@ -5,7 +5,7 @@ require 'resque'
 require 'logger'
 require 'yaml'
 require 'erb'
-require 'cgi'
+require 'uri'
 require 'active_support'
 require 'sinatra/base'
 

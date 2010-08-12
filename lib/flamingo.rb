@@ -28,24 +28,24 @@ require 'flamingo/logging/formatter'
 require 'flamingo/web/server'
 
 module Flamingo
-  
+
   class << self
-    
+
     def configure!(config_file=nil)
       config_file = find_config_file(config_file)
       @config = Flamingo::Config.load(config_file)
       validate_config!
       logger.info "Loaded config file from #{config_file}"
     end
-    
+
     def config=(config)
-      @config = config 
+      @config = config
     end
-    
+
     def config
       @config
     end
-    
+
     # PHD: Lovingly borrowed from Resque
 
     # Accepts:
@@ -68,7 +68,7 @@ module Flamingo
         raise "Invalid redis configuration: #{server.inspect}"
       end
     end
-  
+
     # Returns the current Redis connection. If none has been created, will
     # create a new one.
     def redis
@@ -102,16 +102,16 @@ module Flamingo
     def logger
       @logger ||= new_logger
     end
-    
+
     def logger=(logger)
       @logger = logger
     end
-    
+
     private
       def root_dir
         File.expand_path(File.dirname(__FILE__)+'/..')
       end
-    
+
       def new_logger
         dest = config.logging.dest(nil)
         if valid_logging_dest?(dest)
@@ -119,32 +119,33 @@ module Flamingo
         else
           log_file = File.join(root_dir,'log','flamingo.log')
         end
-  
+
         # determine logging level (default is Logger::INFO)
         begin
           log_level = Logger.const_get(config.logging.level('INFO').upcase)
         rescue
           log_level = Logger::INFO
         end
-  
+
         # create logger facility
         logger = Logger.new(log_file)
         logger.level = log_level
         logger.formatter = Flamingo::Logging::Formatter.new
         logger
       end
-      
+
       def valid_logging_dest?(dest)
         return false unless dest
         File.writable?(File.dirname(dest))
       end
 
       def validate_config!
-        unless config.username(nil) && config.password(nil)
-          raise "The config file must be YAML formatted and contain a username and password. See examples/flamingo.yml."
+        unless (config.username(nil) && config.password(nil)) || (config.oauth)
+          raise "The config file must be YAML formatted and contain either a username+password or an oauth section. See examples/flamingo.yml."
+
         end
       end
-      
+
       def find_config_file(config_file=nil)
         locations = [config_file,"./flamingo.yml","~/flamingo.yml"].compact.uniq
         found = locations.find do |file|
@@ -156,5 +157,5 @@ module Flamingo
         File.expand_path(found)
       end
 
-  end 
+  end
 end

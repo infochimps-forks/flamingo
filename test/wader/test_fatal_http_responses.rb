@@ -1,19 +1,19 @@
 require "#{File.dirname(__FILE__)}/helper"
 
 class TestFatalHttpResponses < Test::Unit::TestCase
-  
+
   include WaderTest
-  
+
   def test_unauthorized_is_fatal
     run_test_for_status_code(401,"Unauthorized",
-      Flamingo::Wader::AuthenticationError) 
+      Flamingo::Wader::AuthenticationError)
   end
 
   def test_forbidden_is_fatal
     run_test_for_status_code(403,"Forbidden",
       Flamingo::Wader::AuthenticationError)
   end
-  
+
   def test_unknown_is_fatal
     run_test_for_status_code(404,"Unknown",
       Flamingo::Wader::UnknownStreamError)
@@ -23,12 +23,12 @@ class TestFatalHttpResponses < Test::Unit::TestCase
     run_test_for_status_code(406,"Not Acceptable",
       Flamingo::Wader::InvalidParametersError)
   end
-  
+
   def test_too_long_is_fatal
     run_test_for_status_code(413,"Too Long",
       Flamingo::Wader::InvalidParametersError)
   end
-  
+
   def test_range_unacceptable_is_fatal
     run_test_for_status_code(416,"Range Unacceptable",
       Flamingo::Wader::InvalidParametersError)
@@ -39,15 +39,15 @@ class TestFatalHttpResponses < Test::Unit::TestCase
       Mockingbird.setup(:port=>8080) do
         status code, message
       end
-      
+
       error = nil
-      
-      wader = Flamingo::Wader.new('user','pass',MockStream.new)
-      
+
+      wader = new_wader
+
       Resque.after_enqueue do |job,*args|
         fail("Shouldn't enqueue anything")
       end
-      
+
       begin
         wader.run
       rescue => e
@@ -55,12 +55,12 @@ class TestFatalHttpResponses < Test::Unit::TestCase
         assert_equal(error_type,e.class)
         assert_equal(code,e.code)
       end
-      
+
       assert_equal(0,wader.retries,"No retry attempts should be made")
       assert_not_nil(error)
-      
+
     ensure
-      Mockingbird.teardown          
+      Mockingbird.teardown
     end
 
 end

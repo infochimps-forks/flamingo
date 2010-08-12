@@ -164,6 +164,8 @@ code.
 OAuth
 -----
 
+**OAuth support is still in development.** As in, it doesn't quite work yet.
+
 1. Visit dev.twitter.com and click 'Your Apps', then 'Register a New App'.
 
 2. Register your app under the account you'll want to use. Use a name like
@@ -178,11 +180,11 @@ into the config file.
 
 5. Open up your flamingo config file (~/.flamingo.yml, probably), and add your keys:
 
-    oauth:
-      :consumer_key:        afgRzQkL12pb343asdMp9
-      :consumer_secret:     aasdfghkkladsfjhasdlkgjahsdflkjasdhfalsdV0
-      :access_token:        12345689-AASasdfwqterwrJ4567HAasdflksdfsuad1309I
-      :access_secret:       sadflkjhARTOUWRVzcvkjasldruasdkjxcbkjasdhfrkdhvl
+        oauth:
+          :consumer_key:        afgRzQkL12pb343asdMp9
+          :consumer_secret:     aasdfghkkladsfjhasdlkgjahsdflkjasdhfalsdV0
+          :access_token:        12345689-AASasdfwqterwrJ4567HAasdflksdfsuad1309I
+          :access_secret:       sadflkjhARTOUWRVzcvkjasldruasdkjxcbkjasdhfrkdhvl
 
    (indentation matters: the ':oauth:' part must be flush left, the rest indented two spaces)
 

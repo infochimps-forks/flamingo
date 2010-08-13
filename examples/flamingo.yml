@@ -14,6 +14,15 @@ password:       PASSWORD
 # For filter, set the terms to track in the flamingo console (see README.md)
 stream:         filter
 
+# == Stream connection options.
+# Use SSL to connect? It's slower but secure
+ssl:                    false
+# User agent to report.
+user_agent:             Flamingo/0.1
+# POST or GET as request method.  There's a limit on length of a GET query
+# string so use POST if you have a lot of keywords to track
+method:                 GET
+
 # Point the logs where you like.
 # Should change the log level from DEBUG to INFO before you deploy: allowed levels are
 #    DEBUG < INFO < WARN < ERROR < FATAL < UNKNOWN

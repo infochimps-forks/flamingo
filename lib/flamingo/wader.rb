@@ -97,7 +97,7 @@ module Flamingo
     private
       def connect_and_run
         EventMachine::run do
-          self.connection = stream.connect(auth.merge({ :method => 'POST' }))
+          self.connection = stream.connect(auth)
           Flamingo.logger.info("Listening on stream: #{stream.path}")
 
           connection.each_item do |event_json|

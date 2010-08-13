@@ -43,6 +43,12 @@ module Flamingo
       not blank?
     end
 
+    def slice *keys
+      hash = self.class.new
+      keys.each{|k| hash[k] = self[k.to_s] if has_key?(k.to_s) }
+      hash
+    end
+
     private
       def empty_config?(value)
         value.is_a?(self.class) && value.empty?

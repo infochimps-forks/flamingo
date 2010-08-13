@@ -1,5 +1,4 @@
 module Flamingo
-
   class Stream
 
     VERSION = 1
@@ -11,6 +10,13 @@ module Flamingo
       :sample   => "statuses/sample"
     )
 
+    STREAM_DEFAULTS = {
+      :ssl        => true,
+      :user_agent => "Flamingo/0.1",
+      :method     => 'GET',
+      :proxy      => nil,
+    }
+
     class << self
       def get(name)
         new(name,StreamParams.new(name))
@@ -19,19 +25,20 @@ module Flamingo
 
     attr_accessor :name, :params
 
-    def initialize(name,params)
+    def initialize(name, params)
       self.name = name
       self.params = params
     end
 
     def connect(options)
-      conn_opts = {:ssl => true, :user_agent => "Flamingo/0.1" }.
-        merge(options).merge(:path=>path, :method => 'POST', :content => query)
+      conn_opts = STREAM_DEFAULTS.
+        merge(Flamingo.config.slice(*STREAM_DEFAULTS.keys)).
+        merge(:path=> path, :params => params.all ).
+        merge(options)
       Twitter::JSONStream.connect(conn_opts)
     end
 
     def path
-      # Stuffing the query into the path is raising havoc with OAuth
       "/#{VERSION}/#{resource}.json"
     end
 
@@ -44,24 +51,5 @@ module Flamingo
         :name=>name,:resource=>resource,:params=>params.all
       )
     end
-
-    private
-      def query
-        params.map{|key,value| "#{key}=#{param_value(value)}" }.join("&")
-      end
-
-      def param_value(val)
-        case val
-          when String then escape(val)
-          when Array then val.map{|v| escape(v) }.join(",")
-          else nil
-        end
-      end
-
-      def escape v
-        URI.escape(v.to_s, /[^a-zA-Z0-9\-\.\_\~]/)
-      end
-
   end
-
 end

@@ -46,7 +46,7 @@ module Flamingo
 
       if auth[:oauth]
         oauth = auth[:oauth]
-        (:consumer_key,:consumer_secret,:access_key,:access_secret).each do |p|
+        [:consumer_key,:consumer_secret,:access_key,:access_secret].each do |p|
           oauth[p] || oauth.delete( p.to_s )
         end
       end

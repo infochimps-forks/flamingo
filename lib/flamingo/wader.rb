@@ -43,6 +43,13 @@ module Flamingo
       self.auth   = auth
       self.server_unavailable_max_retries = 5
       self.server_unavailable_wait = 60
+
+      if auth[:oauth]
+        oauth = auth[:oauth]
+        (:consumer_key,:consumer_secret,:access_key,:access_secret).each do |p|
+          oauth[p] || oauth.delete( p.to_s )
+        end
+      end
     end
 
     #

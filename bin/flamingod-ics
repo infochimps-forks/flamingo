@@ -5,6 +5,7 @@ require 'flamingo'
 require 'optparse'
 
 require 'wukong'
+require 'wukong/store'
 module Flamingo
   class Wader
     private

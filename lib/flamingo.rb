@@ -1,3 +1,4 @@
+
 require 'rubygems'
 require 'redis/namespace'
 require 'twitter/json_stream'
@@ -67,6 +68,7 @@ module Flamingo
       else
         raise "Invalid redis configuration: #{server.inspect}"
       end
+      Resque.redis = @redis
     end
 
     # Returns the current Redis connection. If none has been created, will

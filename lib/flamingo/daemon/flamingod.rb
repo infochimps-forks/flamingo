@@ -16,10 +16,10 @@ module Flamingo
     # * USR1 will restart the wader gracefully.
     #
     class Flamingod
-      
+
       # For process-scoping of traps
       include TrapKeeper
-      
+
       def exit_signaled?
         @exit_signaled
       end
@@ -120,7 +120,7 @@ module Flamingo
           end
         end
       end
-      
+
       def handle_wader_exit(status)
         if WaderProcess.fatal_exit?(status)
           Flamingo.logger.error "Wader exited with status "+

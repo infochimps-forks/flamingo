@@ -6,11 +6,23 @@ require 'optparse'
 
 require 'wukong'
 require 'wukong/store'
+
+require 'rubygems'
+require 'graphite'
+
 module Flamingo
+
+  # Define an accumulator for tracking flamingo scrape data 
+  flamingo_counter = Graphiterb::Accumulator.new('flamingo_scrape')
+
   class Wader
     private
     def dispatch_event event_json
       Flamingo.logger.debug "Wader dispatched event -- monkeypatched"
+
+      flamingo_counter.increment("events")
+      flamingo_counter.incrementBy(event_json.length,"bytes")
+
       commitlog << event_json
       Resque.enqueue(Flamingo::DispatchEvent, event_json)
     end

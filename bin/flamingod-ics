@@ -1,28 +1,36 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+gem 'redis-namespace','0.7.0'
 
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'flamingo'
 require 'optparse'
-
 require 'wukong'
 require 'wukong/store'
 
 #require 'rubygems'
 #require 'graphiterb'
 
+# This is a stub definition for the TwitterScrapeJob class which identifies which queue
+# to put data on. Later, workers will instantiate this class as it is defined
+# by 'wuclan/twitter/scrape_job/twitter_scrape_job'
+class TwitterScrapeJob
+ @queue = "twitter_stream"
+end
+
 module Flamingo
-
-
   class Wader
     private
     def dispatch_event event_json
       Flamingo.logger.debug "Wader dispatched event -- monkeypatched"
 
+      #TODO: add graphite performance data back in here. 
+
       #flamingo_counter.increment("events")
       #flamingo_counter.incrementBy(event_json.length,"bytes")
 
       commitlog << event_json
-      Resque.enqueue(Flamingo::DispatchEvent, event_json)
+      Resque.enqueue( TwitterScrapeJob, event_json)
     end
 
     def commitlog

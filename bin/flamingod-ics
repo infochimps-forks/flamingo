@@ -14,7 +14,7 @@ require 'wukong/store'
 # This is a stub definition for the TwitterScrapeJob class which identifies which queue
 # to put data on. Later, workers will instantiate this class as it is defined
 # by 'wuclan/twitter/scrape_job/twitter_scrape_job'
-class TwitterStreamScrapeJob
+class TwitterStreamJob
  @queue = "twitter_stream"
 end
 
@@ -30,7 +30,7 @@ module Flamingo
       #flamingo_counter.incrementBy(event_json.length,"bytes")
 
       commitlog << event_json
-      Resque.enqueue( TwitterStreamScrapeJob, event_json)
+      Resque.enqueue( TwitterStreamJob, event_json)
     end
 
     def commitlog

@@ -76,7 +76,7 @@ module Flamingo
       # Create a new timer that will flush the job_package in 1 second.
       # Note that flush will take care of cleaning up any timers that have been
       # started.
-      @package_timer = EM.Timer.new(1) do 
+      @package_timer = EventMachine::Timer.new(1) do 
         flush
       end
     end

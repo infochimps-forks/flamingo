@@ -66,7 +66,11 @@ module Flamingo
       
       # Hold off on sending the package of to resque until after the critical section.
       # No sense holding up the works while we deal with putting stuff on resque.
-      Resque.enqueue( TwitterStreamPackageJob, jobs_to_send ) if jobs_to_send
+      if jobs_to_send
+        jobs_json = "[#{jobs_to_send.join(",")}]"
+        Resque.enqueue( TwitterStreamPackageJob, jobs_json )
+      end
+
     end
 
     def set_timer

@@ -57,7 +57,7 @@ module Flamingo
       # Not that this section might block the dispacther section of the code, so this
       # section should not do anything time consuming. For this reason, the actual connection 
       # with resque is put off until after the critical section.
-      package_mutex.syncronize do
+      package_mutex.synchronize do
         if @job_package.length > 0
           jobs_to_send = @job_package
           @job_package = []

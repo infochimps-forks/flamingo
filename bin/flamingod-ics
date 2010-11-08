@@ -96,7 +96,7 @@ module Flamingo
       # ensure that the dispatch job is not delayed.
       package_mutex.synchronize do
         @job_package ||= []
-        @ob_package.push job
+        @job_package.push job
 
         # Check to see if we have a large number of events ready to send
         if @job_package.length > 25

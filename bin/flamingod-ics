@@ -43,7 +43,7 @@ module Flamingo
     end
 
     def flush
-      
+
       jobs_to_send = nil
 
       # The whole point of the timer is to ensure that data that has been placed on the 
@@ -67,8 +67,7 @@ module Flamingo
       # Hold off on sending the package of to resque until after the critical section.
       # No sense holding up the works while we deal with putting stuff on resque.
       if jobs_to_send
-        jobs_json = "[#{jobs_to_send.join(",")}]"
-        Resque.enqueue( TwitterStreamPackageJob, jobs_json )
+          Resque.enqueue( TwitterStreamPackageJob, jobs_to_send )
       end
 
     end

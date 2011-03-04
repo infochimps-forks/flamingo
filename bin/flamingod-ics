@@ -152,7 +152,7 @@ module Flamingo
 
       @commitlog = Wukong::Store::ChhChunkedFlatFileStore.new( { :rootdir   => File.expand_path(Flamingo.config.commitlog_path), 
                                                                  :chunktime => Flamingo.config.commitlog_chunk_time , 
-                                                                 :filemode  => 'a+'
+                                                                 :filemode  => 'a+',
 :pattern => ":rootdir/:date-:handle:timestamp-:pid.tsv",
 } 
 
